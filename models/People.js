@@ -23,6 +23,7 @@ const peopleSchema = mongoose.Schema(
     },
     avatar: {
       type: String,
+      required: true
     },
     role: {
       type: String,
@@ -35,6 +36,6 @@ const peopleSchema = mongoose.Schema(
   }
 );
 
-const People = new mongoose.model("People", peopleSchema);
+const People = mongoose.model("People", peopleSchema);
 
 module.exports = People;

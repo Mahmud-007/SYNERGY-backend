@@ -1,5 +1,8 @@
-const User = require("../models/People");
+const path = require("path");
 const bcrypt = require("bcrypt");
+
+//internal imports
+const User = require("../models/People");
 
 
 //get users
@@ -30,9 +33,9 @@ async function addUser (req, res, next){
      });
      try{
         user.save();
-        res.json({
-            message : "User added"
-        });
+        // res.json({
+        //     message : "User added"
+        // });
     }catch(error){
         console.log(error)
         res.json({
