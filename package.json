@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "NODE_ENV=development nodemon index.js",
+    "start": "SET NODE_ENV=development & nodemon index.js",
     "prod": "NODE_ENV=development node index.js"
   },
   "author": "",
@@ -13,9 +13,13 @@
   "dependencies": {
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.5",
+    "crypto": "^1.0.1",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "express-validator": "^6.13.0",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.8",
-    "nodemon": "^2.0.13"
+    "nodemon": "^2.0.13",
+    "sib-api-v3-sdk": "^8.2.1"
   }
 }

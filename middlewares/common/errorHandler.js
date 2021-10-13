@@ -5,8 +5,9 @@ function notFoundHandler(res, req, next){
 }
 
 function errorHandler (error, req, res, next){
-    res.json({
-        message : error.message,
+    res.status(error.statusCode).json({
+        message: error.message,
+        data: error.data,
         title : `${process.env.APP_NAME} | Error Page`
     });
     console.log(error.message);

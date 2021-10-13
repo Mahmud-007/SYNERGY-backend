@@ -2,9 +2,13 @@ const mongoose = require("mongoose");
 
 const peopleSchema = mongoose.Schema(
   {
-    name: {
+    username: {
       type: String,
       required: true,
+    },
+    name: {
+      type: String,
+      // required: true,
       trim: true,
     },
     email: {
@@ -15,7 +19,7 @@ const peopleSchema = mongoose.Schema(
     },
     mobile: {
       type: String,
-      required: true,
+      // required: true,
     },
     password: {
       type: String,
@@ -23,13 +27,19 @@ const peopleSchema = mongoose.Schema(
     },
     avatar: {
       type: String,
-      required: true
+      // required: true
     },
     role: {
       type: String,
       enum: ["admin", "user"],
       default: "user",
     },
+    resetToken: {
+      type: String,
+    },
+    resetTokenTimeout: {
+      type: mongoose.Schema.Types.Date,
+    }
   },
   {
     timestamps: true,
