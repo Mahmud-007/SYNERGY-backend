@@ -72,7 +72,7 @@ router.post(
 					}
 				});
 			})
-			.normalizeEmail(),
+			.normalizeEmail({ gmail_remove_dots: false }),
 		body('password').trim(),
 	],
 	authController.postlogin
@@ -94,7 +94,7 @@ router.put(
 					}
 				});
 			})
-			.normalizeEmail(),
+			.normalizeEmail({ gmail_remove_dots: false }),
 	],
 	authController.putResetPassword
 );

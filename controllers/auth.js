@@ -4,8 +4,9 @@ const crypto = require('crypto');
 const SibApiV3Sdk = require('sib-api-v3-sdk');
 const jwt = require('jsonwebtoken');
 
-const PendingUser = require('../models/pendingUser');
+const PendingUser = require('../models/PendingUser');
 const People = require('../models/People');
+const Room = require('../models/Room');
 
 const tokenList = {};
 
@@ -175,9 +176,18 @@ exports.postlogin = async (req, res, next) => {
 			peopleId: people._id.toString(),
 			token: token,
 		};
+		const rooms = await Room.find({
+			$or: [
+				{ creator: req.peopleId },
+				{
+					member: {
+						peoples: { $elemMatch: { peopleId: req.peopleId } },
+					},
+				},
+			],
+		});
 
 		res.status(200)
-			.setHeader('Authorization', refreshToken)
 			.cookie('refreshToken', refreshToken, {
 				httpOnly: true,
 			})

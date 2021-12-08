@@ -12,6 +12,7 @@ const { dbConnection } = require('./middlewares/common/database');
 //routes
 const userRouter = require('./routers/userRouter');
 const authRoutes = require('./routers/auth');
+const roomRoutes = require('./routers/roomRouter');
 
 const app = express();
 dotenv.config();
@@ -43,6 +44,7 @@ app.use((req, res, next) => {
 
 // Routing
 app.use('/auth', authRoutes);
+app.use('/room', roomRoutes);
 
 // Error Handleing
 app.use(notFoundHandler);
