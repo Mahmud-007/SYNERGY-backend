@@ -35,7 +35,7 @@ exports.signup = async (req, res, next) => {
 
 	try {
 		const hashedPassword = await bcrypt.hash(password, 12);
-		const buffer = await crypto.randomBytes(32);
+		const buffer = crypto.randomBytes(32);
 		const token = buffer.toString('hex');
 
 		const pendingUser = new PendingUser({
@@ -177,6 +177,7 @@ exports.postlogin = async (req, res, next) => {
 		};
 
 		res.status(200)
+			.setHeader('Authorization', refreshToken)
 			.cookie('refreshToken', refreshToken, {
 				httpOnly: true,
 			})

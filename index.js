@@ -10,7 +10,6 @@ const {
 const { dbConnection } = require('./middlewares/common/database');
 
 //routes
-const loginRouter = require('./routers/loginRouter');
 const userRouter = require('./routers/userRouter');
 const authRoutes = require('./routers/auth');
 
@@ -29,7 +28,8 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 
 // CORS Headers
 app.use((req, res, next) => {
-	res.setHeader('Access-Control-Allow-Origin', '*');
+	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+	res.setHeader('Access-Control-Allow-Credentials', 'true');
 	res.setHeader(
 		'Access-Control-Allow-Methods',
 		'GET, POST, PUT, PATCH, DELETE'
@@ -42,7 +42,6 @@ app.use((req, res, next) => {
 });
 
 // Routing
-app.use('/api', loginRouter, userRouter);
 app.use('/auth', authRoutes);
 
 // Error Handleing
