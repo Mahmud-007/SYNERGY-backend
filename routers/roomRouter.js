@@ -10,10 +10,12 @@ const isAuth = require('../middlewares/auth/isAuth');
 router.put('/create', isAuth, roomController.createRoom);
 
 router.put(
-	'/add-people',
+	'/invitation',
 	isAuth,
 	roomAuth.isRoomAdmin,
 	roomController.sendInvationToRoom
 );
+
+router.get('/invitation/verify/:token', roomController.addPeopleToRoom);
 
 module.exports = router;
