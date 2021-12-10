@@ -213,30 +213,39 @@ exports.postlogin = async (req, res, next) => {
 };
 
 exports.refreshToken = async (req, res, next) => {
-	const refreshToken = req.get('Authorization');
+	const authorization = req.get('Authorization');
 
-	if (refreshToken && refreshToken in tokenList) {
-		const email = tokenList[refreshToken].email;
-		const peopleId = tokenList[refreshToken].peopleId;
+	try {
+		const refreshToken = authorization.split(' ')[1];
 
-		const newToken = jwt.sign(
-			{
-				email: email,
-				peopleId: peopleId,
-			},
-			process.env.JWT_SECRET_KEY,
-			{ expiresIn: process.env.JWT_TOKEN_TIMEOUT + 'h' }
-		);
+		if (refreshToken && refreshToken in tokenList) {
+			const email = tokenList[refreshToken].email;
+			const peopleId = tokenList[refreshToken].peopleId;
 
-		tokenList[refreshToken].token = newToken;
-		res.status(200).json({
-			token: newToken,
-			tokenTimeout: process.env.JWT_TOKEN_TIMEOUT,
-		});
-	} else {
-		res.status(404).json({
-			message: 'Invalid request',
-		});
+			const newToken = jwt.sign(
+				{
+					email: email,
+					peopleId: peopleId,
+				},
+				process.env.JWT_SECRET_KEY,
+				{ expiresIn: process.env.JWT_TOKEN_TIMEOUT + 'h' }
+			);
+
+			tokenList[refreshToken].token = newToken;
+			res.status(200).json({
+				token: newToken,
+				tokenTimeout: process.env.JWT_TOKEN_TIMEOUT,
+			});
+		} else {
+			res.status(404).json({
+				message: 'Invalid request',
+			});
+		}
+	} catch (err) {
+		if (!err.statusCode) {
+			err.statusCode = 500;
+		}
+		next(err);
 	}
 };
 

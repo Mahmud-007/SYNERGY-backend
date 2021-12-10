@@ -4,7 +4,6 @@ const { body } = require('express-validator');
 const People = require('../models/People');
 
 const authController = require('../controllers/auth');
-const isAuth = require('../middlewares/auth/isAuth');
 
 const router = express.Router();
 
@@ -122,6 +121,7 @@ router.put(
 	authController.putResetNow
 );
 
+// GET -> /auth/refresh-token {refresh token must be inside 'Authorization' header}
 router.get('/refresh-token', authController.refreshToken);
 
 module.exports = router;
