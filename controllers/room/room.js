@@ -1,9 +1,9 @@
 const SibApiV3Sdk = require('sib-api-v3-sdk');
 const crypto = require('crypto');
 
-const People = require('../models/People');
-const Room = require('../models/Room');
-const RoomInvitation = require('../models/RoomInvitation');
+const People = require('../../models/People');
+const Room = require('../../models/Room');
+const RoomInvitation = require('../../models/RoomInvitation');
 const mongoose = require('mongoose');
 
 const defaultClient = SibApiV3Sdk.ApiClient.instance;

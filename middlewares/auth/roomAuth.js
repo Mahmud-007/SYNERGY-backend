@@ -1,7 +1,7 @@
 const Room = require('../../models/Room');
 
 exports.hasRoomAuth = async (req, res, next) => {
-	const roomId = req.body.roomId;
+	const roomId = req.body.roomId || req.params.roomId;
 	try {
 		const room = await Room.findOne({
 			_id: roomId,
@@ -29,7 +29,7 @@ exports.hasRoomAuth = async (req, res, next) => {
 };
 
 exports.isRoomAdmin = async (req, res, next) => {
-	const roomId = req.body.roomId;
+	const roomId = req.body.roomId || req.params.roomId;
 	try {
 		const room = await Room.findOne({
 			_id: roomId,
