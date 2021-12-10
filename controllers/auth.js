@@ -4,7 +4,7 @@ const crypto = require('crypto');
 const SibApiV3Sdk = require('sib-api-v3-sdk');
 const jwt = require('jsonwebtoken');
 
-const PendingUser = require('../models/PendingUser');
+const PendingUser = require('../models/pendingUser');
 const People = require('../models/People');
 const Room = require('../models/Room');
 
@@ -24,6 +24,7 @@ let passwordResetEmail = new SibApiV3Sdk.SendSmtpEmail();
 exports.signup = async (req, res, next) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
+		console.log(errors.array());
 		const error = new Error('Validation failed.');
 		error.data = errors.array();
 		error.statusCode = 422;
