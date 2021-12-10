@@ -17,23 +17,24 @@ let roomInvitationEmail = new SibApiV3Sdk.SendSmtpEmail();
 
 exports.createRoom = async (req, res, next) => {
 	const roomName = req.body.roomName;
+	console.log("roomName",roomName);
 	try {
 		const people = await People.findById(req.peopleId);
 
-		if (!people) {
-			const err = new Error('People not found');
-			err.statusCode = 404;
-			throw err;
-		}
-		let room = Room.findOne({
-			creator: people._id,
-			name: roomName,
-		});
-		if (room) {
-			return res.status(422).json({
-				message: `You already have a room with the name ${roomName}`,
-			});
-		}
+		// if (!people) {
+		// 	const err = new Error('People not found');
+		// 	err.statusCode = 404;
+		// 	throw err;
+		// }
+		// let room = Room.findOne({
+		// 	creator: people._id,
+		// 	name: roomName,
+		// });
+		// if (room) {
+		// 	return res.status(422).json({
+		// 		message: `You already have a room with the name ${roomName}`,
+		// 	});
+		// }
 		room = new Room({
 			name: roomName,
 			creator: people._id,
