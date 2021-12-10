@@ -5,6 +5,7 @@ const People = require('../../models/People');
 const Room = require('../../models/Room');
 const RoomInvitation = require('../../models/RoomInvitation');
 const mongoose = require('mongoose');
+const Task = require('../../models/Task');
 
 const defaultClient = SibApiV3Sdk.ApiClient.instance;
 
@@ -156,6 +157,31 @@ exports.addPeopleToRoom = async (req, res, next) => {
 		await room.addPeople(people, roomInvitation.role);
 		res.status(201).json({
 			message: `${people.username} is added to room ${room.name}`,
+		});
+	} catch (err) {
+		if (!err.statusCode) {
+			err.statusCode = 500;
+		}
+		next(err);
+	}
+};
+
+exports.getRoom = async (req, res, next) => {
+	const roomId = req.params.roomId;
+	try {
+		const room = await Room.findById(roomId);
+		if (!room) {
+			return res.status(404).json({
+				message: `Room with id ${roomId} not found`,
+			});
+		}
+		const tasks = await Task.find({
+			roomId: roomId,
+		});
+		res.status(200).json({
+			message: 'Success',
+			room: room,
+			tasks: tasks,
 		});
 	} catch (err) {
 		if (!err.statusCode) {

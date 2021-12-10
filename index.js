@@ -10,7 +10,7 @@ const {
 const { dbConnection } = require('./middlewares/common/database');
 
 //routes
-const userRouter = require('./routers/user');
+const userRoutes = require('./routers/user');
 const authRoutes = require('./routers/auth');
 const roomRoutes = require('./routers/room');
 const conversationRoutes = require('./routers/conversation');
@@ -45,6 +45,7 @@ app.use((req, res, next) => {
 
 // Routing
 app.use('/auth', authRoutes);
+app.use('/user', userRoutes);
 app.use('/room', roomRoutes);
 app.use('/conversation', conversationRoutes);
 

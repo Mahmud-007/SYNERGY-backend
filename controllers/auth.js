@@ -97,6 +97,7 @@ exports.getVerfication = async (req, res, next) => {
 		const people = new People({
 			username: pendingUser.username,
 			email: pendingUser.email,
+			avatar: `https://avatars.dicebear.com/api/${process.env.AVATAR_STYLE}/${pendingUser.username}.svg`,
 			password: pendingUser.password,
 		});
 
@@ -146,7 +147,9 @@ exports.postlogin = async (req, res, next) => {
 	const password = req.body.password;
 
 	try {
-		const people = await People.findOne({ email: email });
+		const people = await People.findOne({
+			$or: [{ email: email }, { username: email }],
+		});
 
 		const storedPasswored = people.password;
 		const doMatch = await bcrypt.compare(password, storedPasswored);
@@ -178,10 +181,10 @@ exports.postlogin = async (req, res, next) => {
 		};
 		const rooms = await Room.find({
 			$or: [
-				{ creator: req.peopleId },
+				{ creator: people._id },
 				{
 					member: {
-						peoples: { $elemMatch: { peopleId: req.peopleId } },
+						peoples: { $elemMatch: { peopleId: people._id } },
 					},
 				},
 			],
@@ -199,6 +202,11 @@ exports.postlogin = async (req, res, next) => {
 			.json({
 				message: 'Logged In!',
 				peopleId: people._id,
+				username: people.username,
+				fisrtName: people.firstName,
+				lastName: people.lastName,
+				avatar: people.avatar,
+				rooms: rooms,
 				token: token,
 				tokenTimeout: process.env.JWT_TOKEN_TIMEOUT,
 			});

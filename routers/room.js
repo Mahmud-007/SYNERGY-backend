@@ -3,6 +3,7 @@ const router = express.Router();
 
 const roomController = require('../controllers/room/room');
 const roomConversationController = require('../controllers/room/roomConversation');
+const taskController = require('../controllers/room/task');
 
 const roomAuth = require('../middlewares/auth/roomAuth');
 
@@ -36,6 +37,22 @@ router.post(
 	isAuth,
 	roomAuth.hasRoomAuth,
 	roomConversationController.sendRoomMessage
+);
+
+// GET -> /room/:roomId
+router.get(
+	'/:roomId',
+	isAuth,
+	roomAuth.hasRoomAuth,
+	roomController.getRoom
+);
+
+// POST -> /room/:roomId/create-task {body -> assignedTo(username or email), role, taskName, taskDescription }
+router.post(
+	'/:roomId/create-task',
+	isAuth,
+	roomAuth.hasRoomAuth,
+	taskController.createTask
 );
 
 module.exports = router;
