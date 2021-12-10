@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const People = require('../models/People');
 const Room = require('../models/Room');
 const RoomInvitation = require('../models/RoomInvitation');
+const mongoose = require('mongoose');
 
 const defaultClient = SibApiV3Sdk.ApiClient.instance;
 
@@ -24,7 +25,16 @@ exports.createRoom = async (req, res, next) => {
 			err.statusCode = 404;
 			throw err;
 		}
-		const room = new Room({
+		let room = Room.findOne({
+			creator: people._id,
+			name: roomName,
+		});
+		if (room) {
+			return res.status(422).json({
+				message: `You already have a room with the name ${roomName}`,
+			});
+		}
+		room = new Room({
 			name: roomName,
 			creator: people._id,
 		});
@@ -43,7 +53,7 @@ exports.createRoom = async (req, res, next) => {
 };
 
 exports.sendInvationToRoom = async (req, res, next) => {
-	const newPeopleId = req.body.peopleId;
+	const peopleInfo = req.body.peopleInfo;
 	const role = req.body.role;
 	const roomId = req.body.roomId;
 	try {
@@ -56,7 +66,9 @@ exports.sendInvationToRoom = async (req, res, next) => {
 				message: 'People not found!',
 			});
 		}
-		const newPeople = await People.findById(newPeopleId);
+		const newPeople = await People.findOne({
+			$or: [{ email: peopleInfo }, { username: peopleInfo }],
+		});
 		if (!newPeople) {
 			return res.status(404).json({
 				message: 'People not found!',
@@ -108,7 +120,7 @@ exports.sendInvationToRoom = async (req, res, next) => {
 		console.log('Confirmation Sent! Returned data ' + JSON.stringify(data));
 
 		res.status(201).json({
-			message: `Invitation to room ${room._id} is sent to ${newPeopleId}`,
+			message: `Invitation to room ${room.name} is sent to ${newPeople.username}`,
 		});
 	} catch (err) {
 		if (!err.statusCode) {
