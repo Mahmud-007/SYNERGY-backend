@@ -1,6 +1,8 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
+const socket = require('socket.io');
+const http = require('http');
 
 //internal imports
 const {
@@ -8,6 +10,11 @@ const {
 	notFoundHandler,
 } = require('./middlewares/common/errorHandler');
 const { dbConnection } = require('./middlewares/common/database');
+
+// socket
+const { Users } = require('./helper/users');
+const privateMessage = require('./socket/privateMessage');
+const groupMessage = require('./socket/groupMessage');
 
 //routes
 const userRoutes = require('./routers/user');
@@ -54,6 +61,19 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 // App Listening
-app.listen(process.env.PORT, () => {
+
+// app.listen(process.env.PORT, () => {
+// 	console.log(`app listening at http://localhost:${process.env.PORT}`);
+// });
+
+const server = http.createServer(app);
+const io = socket(server, {
+	cors: 'http://localhost:8080',
+});
+
+server.listen(process.env.PORT, () => {
 	console.log(`app listening at http://localhost:${process.env.PORT}`);
 });
+
+privateMessage(io);
+groupMessage(io, Users);

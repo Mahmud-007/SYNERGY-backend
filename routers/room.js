@@ -47,9 +47,9 @@ router.get(
 	roomController.getRoom
 );
 
-// POST -> /room/:roomId/create-task {body -> assignedTo(username or email), role, taskName, taskDescription }
+// POST -> /room/:roomId/task/create {body -> assignedTo(username or email), role, taskName, taskDescription }
 router.post(
-	'/:roomId/create-task',
+	'/:roomId/task/create',
 	isAuth,
 	roomAuth.hasRoomAuth,
 	taskController.createTask
@@ -57,5 +57,45 @@ router.post(
 
 // GET -> /room/all
 router.get('/all', isAuth, roomController.getAllRoom);
+
+// DELETE -> /room/delete {body -> roomId}
+router.delete(
+	'/:roomId/delete',
+	isAuth,
+	roomAuth.isRoomAdmin,
+	roomController.deleteRoom
+);
+
+// DELETE -> /room/task/delete {body -> roomId}
+router.delete(
+	'/:roomId/task/delete',
+	isAuth,
+	roomAuth.hasRoomAuth,
+	taskController.deleteTask
+);
+
+// PUT -> /room/task/complete
+router.put(
+	'/:roomId/task/complete',
+	isAuth,
+	roomAuth.hasRoomAuth,
+	taskController.taskComplete
+);
+
+// GET -> /room/:roomId/my-tasks
+router.get(
+	'/:roomId/my-tasks',
+	isAuth,
+	roomAuth.hasRoomAuth,
+	taskController.getTaskAssigned
+);
+
+// GET -> /room/:roomId/my-tasks
+router.get(
+	'/:roomId/tasks',
+	isAuth,
+	roomAuth.hasRoomAuth,
+	taskController.getAllTasks
+);
 
 module.exports = router;

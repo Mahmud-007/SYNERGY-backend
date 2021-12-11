@@ -16,7 +16,7 @@ exports.hasRoomAuth = async (req, res, next) => {
 		});
 		if (!room) {
 			return res.status(404).json({
-				message: 'Unauthorized or not found',
+				message: 'Unauthorized or not found(Room)',
 			});
 		}
 		next();
