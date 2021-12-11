@@ -179,16 +179,6 @@ exports.postlogin = async (req, res, next) => {
 			peopleId: people._id.toString(),
 			token: token,
 		};
-		const rooms = await Room.find({
-			$or: [
-				{ creator: people._id },
-				{
-					member: {
-						peoples: { $elemMatch: { peopleId: people._id } },
-					},
-				},
-			],
-		});
 
 		res.status(200)
 			.cookie('refreshToken', refreshToken, {
@@ -206,7 +196,6 @@ exports.postlogin = async (req, res, next) => {
 				fisrtName: people.firstName,
 				lastName: people.lastName,
 				avatar: people.avatar,
-				rooms: rooms,
 				token: token,
 				tokenTimeout: process.env.JWT_TOKEN_TIMEOUT,
 			});

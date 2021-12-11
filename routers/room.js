@@ -41,7 +41,7 @@ router.post(
 
 // GET -> /room/:roomId
 router.get(
-	'/:roomId',
+	'/one/:roomId',
 	isAuth,
 	roomAuth.hasRoomAuth,
 	roomController.getRoom
@@ -54,5 +54,8 @@ router.post(
 	roomAuth.hasRoomAuth,
 	taskController.createTask
 );
+
+// GET -> /room/all
+router.get('/all', isAuth, roomController.getAllRoom);
 
 module.exports = router;

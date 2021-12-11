@@ -190,3 +190,30 @@ exports.getRoom = async (req, res, next) => {
 		next(err);
 	}
 };
+
+exports.getAllRoom = async (req, res, next) => {
+	try
+	{
+		console.log('got here');
+		const rooms = await Room.find({
+			$or: [
+				{ creator: req.peopleId },
+				{
+					member: {
+						peoples: { $elemMatch: { peopleId: req.peopleId } },
+					},
+				},
+			],
+		});
+
+		res.status(200).json({
+			message: 'Your room are fetched',
+			rooms: rooms,
+		});
+	} catch (err) {
+		if (!err.statusCode) {
+			err.statusCode = 500;
+		}
+		next(err);
+	}
+};
