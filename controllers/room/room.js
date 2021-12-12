@@ -179,7 +179,9 @@ exports.getRoom = async (req, res, next) => {
 		}
 		const tasks = await Task.find({
 			roomId: roomId,
-		});
+		})
+			.populate('assignedTo.peopleId', 'username email avatar')
+			.exec();
 		res.status(200).json({
 			message: 'Success',
 			room: room,

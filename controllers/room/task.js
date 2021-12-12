@@ -131,7 +131,9 @@ exports.getTaskAssigned = async (req, res, next) => {
 		const tasks = await Task.find({
 			roomId: roomId,
 			'assignedTo.peopleId': req.peopleId,
-		});
+		})
+			.populate('assignedTo.peopleId', 'username email avatar')
+			.exec();
 
 		res.status(200).json({
 			message: 'room user tasks fetched',
@@ -152,7 +154,9 @@ exports.getAllTasks = async (req, res, next) => {
 	try {
 		const tasks = await Task.find({
 			roomId: roomId,
-		});
+		})
+			.populate('assignedTo.peopleId', 'username email avatar')
+			.exec();
 
 		res.status(200).json({
 			message: 'room tasks fetched',
