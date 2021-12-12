@@ -201,8 +201,8 @@ exports.getAllRoom = async (req, res, next) => {
 			$or: [
 				{ creator: req.peopleId },
 				{
-					member: {
-						peoples: { $elemMatch: { peopleId: req.peopleId } },
+					'member.peoples': {
+						$elemMatch: { peopleId: req.peopleId },
 					},
 				},
 			],

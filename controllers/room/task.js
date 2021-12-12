@@ -25,8 +25,8 @@ exports.createTask = async (req, res, next) => {
 			$or: [
 				{ creator: people._id },
 				{
-					member: {
-						peoples: { $elemMatch: { peopleId: people._id } },
+					'member.peoples': {
+						$elemMatch: { peopleId: req.peopleId },
 					},
 				},
 			],
