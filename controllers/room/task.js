@@ -9,6 +9,7 @@ exports.createTask = async (req, res, next) => {
 	const role = req.body.role;
 	const taskName = req.body.taskName;
 	const taskDescription = req.body.taskDescription;
+	const taskDeadline = req.body.taskDeadline;
 
 	try {
 		const people = await People.findOne({
@@ -44,6 +45,7 @@ exports.createTask = async (req, res, next) => {
 				peopleId: people._id,
 				role: role,
 			},
+			deadline: taskDeadline,
 		});
 		await task.save();
 

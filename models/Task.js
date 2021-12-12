@@ -37,7 +37,7 @@ const taskSchema = new Schema(
 			default: false,
 		},
 		deadline: {
-			type: Date,
+			type: String,
 		},
 	},
 	{

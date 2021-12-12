@@ -21,6 +21,7 @@ const userRoutes = require('./routers/user');
 const authRoutes = require('./routers/auth');
 const roomRoutes = require('./routers/room');
 const conversationRoutes = require('./routers/conversation');
+const searchRoutes = require('./routers/search');
 
 const app = express();
 dotenv.config();
@@ -55,6 +56,7 @@ app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 app.use('/room', roomRoutes);
 app.use('/conversation', conversationRoutes);
+app.use('/search', searchRoutes);
 
 // Error Handleing
 app.use(notFoundHandler);
