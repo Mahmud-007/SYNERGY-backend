@@ -204,7 +204,7 @@ exports.getAllRoom = async (req, res, next) => {
 					},
 				},
 			],
-		});
+		}).select('roomId name description');
 
 		res.status(200).json({
 			message: 'Your room are fetched',
