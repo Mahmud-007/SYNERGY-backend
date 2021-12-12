@@ -1,6 +1,7 @@
 const People = require('../../models/People');
 const Task = require('../../models/Task');
 const mongoose = require('mongoose');
+const Room = require('../../models/Room');
 
 exports.createTask = async (req, res, next) => {
 	const roomId = req.body.roomId || req.params.roomId;
@@ -18,19 +19,30 @@ exports.createTask = async (req, res, next) => {
 				message: 'People not found!',
 			});
 		}
-		const peoples = [
-			{
-				peopleId: people._id,
-				role: role,
-			},
-		];
+		const room = await Room.findOne({
+			_id: roomId,
+			$or: [
+				{ creator: people._id },
+				{
+					member: {
+						peoples: { $elemMatch: { peopleId: people._id } },
+					},
+				},
+			],
+		});
+		if (!room) {
+			return res.status(404).json({
+				message: 'People is not in the project',
+			});
+		}
 		const task = new Task({
 			roomId: roomId,
 			createdBy: req.peopleId,
 			name: taskName,
 			description: taskDescription,
 			assignedTo: {
-				peoples: peoples,
+				peopleId: people._id,
+				role: role,
 			},
 		});
 		await task.save();
@@ -42,7 +54,10 @@ exports.createTask = async (req, res, next) => {
 			taskName: taskName,
 			taskDescription: taskDescription,
 			assignedTo: {
-				peoples: peoples,
+				peopleId: people._id,
+				username: people.username,
+				email: people.email,
+				avatar: people.avatar,
 			},
 		});
 	} catch (err) {
@@ -87,7 +102,7 @@ exports.taskComplete = async (req, res, next) => {
 				{ createdBy: req.peopleId },
 				{
 					assignedTo: {
-						peoples: { $elemMatch: { peopleId: req.peopleId } },
+						peopleId: req.peopleId,
 					},
 				},
 			],
@@ -114,14 +129,8 @@ exports.getTaskAssigned = async (req, res, next) => {
 	const roomId = req.body.roomId || req.params.roomId;
 	try {
 		const tasks = await Task.find({
-			// roomId: roomId,
-			assignedTo: {
-				peoples: {
-					$elemMatch: {
-						peopleId: req.peopleId,
-					},
-				},
-			},
+			roomId: roomId,
+			'assignedTo.peopleId': req.peopleId,
 		});
 
 		res.status(200).json({

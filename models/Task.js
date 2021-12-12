@@ -22,18 +22,14 @@ const taskSchema = new Schema(
 			required: true,
 		},
 		assignedTo: {
-			peoples: [
-				{
-					peopleId: {
-						type: Schema.Types.ObjectId,
-						ref: 'People',
-						required: true,
-					},
-					role: {
-						type: String,
-					},
-				},
-			],
+			peopleId: {
+				type: Schema.Types.ObjectId,
+				ref: 'People',
+				required: true,
+			},
+			role: {
+				type: String,
+			},
 		},
 		isCompleted: {
 			type: Boolean,

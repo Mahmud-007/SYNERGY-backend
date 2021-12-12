@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 //internal imports
 const People = require('../models/People');
 const Task = require('../models/Task');
+const Room = require('../models/Room');
 
 exports.getProfile = async (req, res, next) => {
 	try {
@@ -35,11 +36,10 @@ exports.getProfile = async (req, res, next) => {
 exports.getTaskAssigned = async (req, res, next) => {
 	try {
 		const tasks = await Task.find({
-			assignedTo: {
-				peoples: { $elemMatch: { peopleId: req.peopleId } },
-			},
-		});
-
+			'assignedTo.peopleId': req.peopleId,
+		})
+			.populate('roomId', 'name description')
+			.exec();
 		res.status(200).json({
 			message: 'user tasks fetched',
 			tasks: tasks,

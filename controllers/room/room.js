@@ -18,6 +18,7 @@ let roomInvitationEmail = new SibApiV3Sdk.SendSmtpEmail();
 
 exports.createRoom = async (req, res, next) => {
 	const roomName = req.body.roomName;
+	const description = req.body.description;
 	try {
 		const people = await People.findById(req.peopleId);
 
@@ -38,6 +39,7 @@ exports.createRoom = async (req, res, next) => {
 		room = new Room({
 			name: roomName,
 			creator: people._id,
+			description: description,
 		});
 		await room.save();
 		res.status(201).json({

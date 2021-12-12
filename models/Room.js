@@ -13,6 +13,9 @@ const roomSchema = new Schema(
 			ref: 'People',
 			required: true,
 		},
+		desciption: {
+			type: String,
+		},
 		member: {
 			peoples: [
 				{
