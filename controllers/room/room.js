@@ -171,7 +171,9 @@ exports.addPeopleToRoom = async (req, res, next) => {
 exports.getRoom = async (req, res, next) => {
 	const roomId = req.params.roomId;
 	try {
-		const room = await Room.findById(roomId);
+		const room = await Room.findById(roomId)
+			.populate('member.peoples.peopleId', 'username avatar email')
+			.populate('creator', 'username avatar email');
 		if (!room) {
 			return res.status(404).json({
 				message: `Room with id ${roomId} not found`,
