@@ -63,8 +63,7 @@ exports.signup = async (req, res, next) => {
 			templateId: +process.env.SIB_EMAIL_VERIFICATION_TEMPLATE_ID,
 			params: {
 				FULLNAME: username,
-				TOKEN:
-					process.env.SYNERGY_BACKEND + '/auth/verification/' + token,
+				TOKEN: 'http://localhost:8080' + '/auth/verification/' + token,
 				EMAIL: email,
 				SYNERGYURL: process.env.SYNERGY_FRONTEND,
 			},

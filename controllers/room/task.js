@@ -26,7 +26,7 @@ exports.createTask = async (req, res, next) => {
 				{ creator: people._id },
 				{
 					'member.peoples': {
-						$elemMatch: { peopleId: req.peopleId },
+						$elemMatch: { peopleId: people._id },
 					},
 				},
 			],
@@ -103,9 +103,7 @@ exports.taskComplete = async (req, res, next) => {
 			$or: [
 				{ createdBy: req.peopleId },
 				{
-					assignedTo: {
-						peopleId: req.peopleId,
-					},
+					'assignedTo.peopleId': req.peopleId,
 				},
 			],
 		});

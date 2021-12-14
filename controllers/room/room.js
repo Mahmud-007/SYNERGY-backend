@@ -27,15 +27,15 @@ exports.createRoom = async (req, res, next) => {
 			err.statusCode = 404;
 			throw err;
 		}
-		let room = Room.findOne({
-			creator: people._id,
-			name: roomName,
-		});
-		if (room) {
-			return res.status(422).json({
-				message: `You already have a room with the name ${roomName}`,
-			});
-		}
+		// let room = Room.findOne({
+		// 	creator: people._id,
+		// 	name: roomName,
+		// });
+		// if (room) {
+		// 	return res.status(422).json({
+		// 		message: `You already have a room with the name ${roomName}`,
+		// 	});
+		// }
 		room = new Room({
 			name: roomName,
 			creator: people._id,
@@ -113,7 +113,7 @@ exports.sendInvationToRoom = async (req, res, next) => {
 				FIRSTNAME: adminPeople.firstName,
 				LASTNMAE: adminPeople.lastName,
 				JOINROOM:
-					process.env.SYNERGY_BACKEND +
+					'http://localhost:8080' +
 					'/room/invitation/verify/' +
 					token,
 				EMAIL: newPeople.email,
