@@ -108,14 +108,16 @@ exports.sendInvationToRoom = async (req, res, next) => {
 					name: newPeople.username,
 				},
 			],
-			templateId: 7,
+			templateId: +process.env.SIB_ROOM_INVITATION_TEMPLATE_ID,
 			params: {
 				FIRSTNAME: adminPeople.firstName,
 				LASTNMAE: adminPeople.lastName,
 				JOINROOM:
-					'http://localhost:8080/room/invitation/verify/' + token,
+					process.env.SYNERGY_BACKEND +
+					'/room/invitation/verify/' +
+					token,
 				EMAIL: newPeople.email,
-				SYNERGYURL: 'http://localhost:3000',
+				SYNERGYURL: process.env.SYNERGY_FRONTEND,
 			},
 		};
 

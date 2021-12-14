@@ -60,12 +60,13 @@ exports.signup = async (req, res, next) => {
 					name: username,
 				},
 			],
-			templateId: 4,
+			templateId: +process.env.SIB_EMAIL_VERIFICATION_TEMPLATE_ID,
 			params: {
 				FULLNAME: username,
-				TOKEN: 'http://localhost:8080/auth/verification/' + token,
+				TOKEN:
+					process.env.SYNERGY_BACKEND + '/auth/verification/' + token,
 				EMAIL: email,
-				SYNERGYURL: 'http://localhost:8080',
+				SYNERGYURL: process.env.SYNERGY_FRONTEND,
 			},
 		};
 
@@ -104,10 +105,7 @@ exports.getVerfication = async (req, res, next) => {
 		await people.save();
 		await PendingUser.findOneAndDelete(pendingUser._id);
 
-		res.status(200).json({
-			message: 'Email verified!',
-			verificationToken: token,
-		});
+		res.status(201).redirect(process.env.SYNERGY_FRONTEND + '/login');
 		confirmationEmail = {
 			to: [
 				{
@@ -115,12 +113,12 @@ exports.getVerfication = async (req, res, next) => {
 					name: people.username,
 				},
 			],
-			templateId: 5,
+			templateId: +process.env.SIB_ACCOUNT_CONFIRMATION,
 			params: {
 				FULLNAME: people.username,
 				EMAIL: people.email,
-				LOGIN: 'http://localhost:8080/login',
-				SYNERGYURL: 'http://localhost:8080',
+				LOGIN: process.env.SYNERGY_FRONTEND + '/login',
+				SYNERGYURL: process.env.SYNERGY_FRONTEND,
 			},
 		};
 		const data = await apiInstance.sendTransacEmail(confirmationEmail);

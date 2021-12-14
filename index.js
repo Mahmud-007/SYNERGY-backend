@@ -38,7 +38,7 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 
 // CORS Headers
 app.use((req, res, next) => {
-	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+	res.setHeader('Access-Control-Allow-Origin', '*');
 	res.setHeader('Access-Control-Allow-Credentials', 'true');
 	res.setHeader(
 		'Access-Control-Allow-Methods',
@@ -70,7 +70,7 @@ app.use(errorHandler);
 
 const server = http.createServer(app);
 const io = socket(server, {
-	cors: 'http://localhost:8080',
+	cors: process.env.SOCKET_CORS_SERVER,
 });
 
 server.listen(process.env.PORT, () => {
